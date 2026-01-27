@@ -1,14 +1,15 @@
-Three-Point Lighting
-Rim Lighting / Outline Light
+三点布光
+轮廓光
 Top-Down Softbox
-Backlit Silhouette
-Volumetric Lighting / God Rays
+背光剪影
+Volumetric Lighting 体积光
 Golden Hour Glow
-Moody Low-key Lighting
+Moody Low-key Lighting 暗调光)
 Anamorphic Blue Flares
-Ray-Traced Reflections
-Caustics
+光线追踪反射
+Caustics 焦散
 Subsurface Scattering / SSS
-Anisotropic Reflection
-Cyberpunk Neon Accents
-Laser Scan Lines
+Anisotropic Reflection 各向异性反射
+Cyberpunk Neon Accents 赛博霓虹点缀
+glow 辉光
+blue Hour Glow
