@@ -8,11 +8,11 @@ WAREHOUSE = {
     # --- Graphic Core ---
     "Subject":       "data/graphic/subjects.txt",
     "Action":        "data/graphic/actions.txt",
-    "lighting":        "data/graphic/lighting.txt",
-    "lens_language":     "data/graphic/lens_language.txt",
+    "Lighting":        "data/graphic/lighting.txt",
+    "Lens_language":     "data/graphic/lens_language.txt",
     
     # --- Style Matrix ---
-    "StyleSystem":   "data/graphic/styles_system.txt",
+    "Reference":   "data/graphic/styles_reference.txt",
     "Color":         "data/graphic/styles_color.txt",
     "scene":       "data/graphic/styles_scene.txt",
     "Composition":   "data/graphic/styles_composition.txt",
