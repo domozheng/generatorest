@@ -73,8 +73,8 @@ render_sidebar()
 # ===========================
 # 3. 界面布局：关键词范围控制系统
 # ===========================
-st.markdown("## ⚙️ 关键词随机范围控制系统")
-st.caption("勾选你想要在 Graphic Lab 中随机出现的关键词。未勾选的词将不会被引擎选中。")
+st.markdown("## Key Range")
+st.caption("勾选你想要发送deepseek润色的关键词范围")
 st.markdown("---")
 
 # 按类目平铺显示
@@ -131,7 +131,7 @@ st.markdown("---")
 # ===========================
 # 4. 发送指令
 # ===========================
-if st.button("🚀 将关键词范围发送至 Graphic Lab", type="primary", use_container_width=True):
+if st.button("将关键词范围发送至 Work Space", type="primary", use_container_width=True):
     # 计算当前选中的有效数据
     final_dispatch = {}
     total_count = 0
@@ -151,6 +151,6 @@ if st.button("🚀 将关键词范围发送至 Graphic Lab", type="primary", use
     # 将过滤后的名单存入 session_state 供其他页面读取
     st.session_state.active_pool = final_dispatch
     
-    st.toast(f"✅ 范围已锁定！共计 {total_count} 个关键词进入随机池。", icon="🎯")
+    st.toast(f"已选择共计 {total_count} 个关键词进入随机池", icon="🎯")
     time.sleep(1)
     st.switch_page("pages/01_Graphic_Lab.py")
