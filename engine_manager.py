@@ -2,7 +2,7 @@ import streamlit as st
 import os
 
 # ==========================================
-# 1. 本地仓库映射
+# 1. 本地仓库映射 (已移除 Text Studio 相关路径)
 # ==========================================
 WAREHOUSE = {
     # --- Graphic Core ---
@@ -19,13 +19,7 @@ WAREHOUSE = {
     
     # --- Atmosphere ---
     "Mood":          "data/common/moods.txt",
-    "Usage":         "data/common/usage.txt",
-    
-    # --- Text Asset ---
-    "Text_English":  "data/text/text_en.txt",
-    "Text_Spanish":  "data/text/text_es.txt",
-    "Font_Style":    "data/text/fonts.txt",
-    "Ref_Images":    "data/text/ref_images.txt"
+    "Usage":         "data/common/usage.txt"
 }
 
 # ==========================================
@@ -71,27 +65,20 @@ def save_data(file_key, new_list):
         st.error(f"Save failed: {e}")
 
 # ==========================================
-# 4. 侧边栏 (已修复 Logo 路径 & 紧凑布局)
+# 4. 侧边栏 (已清理 Text 统计)
 # ==========================================
 def render_sidebar():
     with st.sidebar:
-        # ✅ 修复：更新 Logo 路径为 images/logo/logo.png
         logo_path = "images/logo/logo.png"
         
-        # 优先检测新路径，如果找不到再检测旧路径（做个兼容）
         if os.path.exists(logo_path):
             st.logo(logo_path, icon_image=logo_path)
-        elif os.path.exists("images/logo/logo.png"):
-            st.logo("images/logo/logo.png", icon_image="images/logo/logo.png")
         
-        
-        # 库存监控 (保持垂直清单，但合并代码减少间距，防止出现滚动条)
         if "db_all" in st.session_state:
             db = st.session_state.db_all
             
             # --- Part 1: Graphic ---
             st.markdown("### Graphic Core")
-            # 使用紧凑写法
             st.markdown(f"""
             **Subject:** {len(db.get('Subject', []))}  
             **Action:** {len(db.get('Action', []))}
@@ -114,11 +101,7 @@ def render_sidebar():
             
             # --- Part 3: Assets ---
             st.markdown("### Assets")
-            st.markdown(f"""
-            **Mood:** {len(db.get('Mood', []))}  
-            **Words:** {len(db.get('Text_English', []))}  
-            **Refs:** {len(db.get('Ref_Images', []))}
-            """)
+            st.markdown(f"**Mood:** {len(db.get('Mood', []))}")
 
 # ==========================================
 # 5. 图库扫描
