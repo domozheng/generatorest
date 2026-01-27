@@ -83,6 +83,8 @@ def render_sidebar():
             st.markdown(f"""
             **Subject:** {len(db.get('Subject', []))}  
             **Action:** {len(db.get('Action', []))}
+            **Lighting:** {len(db.get('Lighting', []))}
+            **LensLanguage:** {len(db.get('LensLanguage', []))}
             """)
             
             st.markdown("---")
@@ -90,18 +92,19 @@ def render_sidebar():
             # --- Part 2: Style ---
             st.markdown("### Style Matrix")
             st.markdown(f"""
-            **System:** {len(db.get('StyleSystem', []))}  
-            **Technique:** {len(db.get('Technique', []))}  
+            **Reference:** {len(db.get('Reference', []))}  
+            **Scene:** {len(db.get('Scene', []))}  
             **Color:** {len(db.get('Color', []))}  
             **Texture:** {len(db.get('Texture', []))}  
             **Composition:** {len(db.get('Composition', []))}  
-            **Accent:** {len(db.get('Accent', []))}
+            **Elements:** {len(db.get('Elements', []))}
+            **Usage:** {len(db.get('Usage', []))}
             """)
             
             st.markdown("---")
             
-            # --- Part 3: Assets ---
-            st.markdown("### Assets")
+            # --- Part 3: Atmosphere ---
+            st.markdown("### Atmosphere")
             st.markdown(f"**Mood:** {len(db.get('Mood', []))}")
 
 # ==========================================
