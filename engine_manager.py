@@ -9,7 +9,7 @@ WAREHOUSE = {
     "Subject":       "data/graphic/subjects.txt",
     "Action":        "data/graphic/actions.txt",
     "Lighting":        "data/graphic/lighting.txt",
-    "Lens_language":     "data/graphic/lens_language.txt",
+    "LensLanguage":     "data/graphic/lens_language.txt",
     
     # --- Style Matrix ---
     "Reference":   "data/graphic/styles_reference.txt",
