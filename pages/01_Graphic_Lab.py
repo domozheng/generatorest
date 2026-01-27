@@ -57,26 +57,26 @@ def smart_pick(category, count=1):
 # ===========================
 # 3. 界面交互
 # ===========================
-st.markdown("## 🎨 Graphic Lab: 视觉方案实验室")
-st.caption("当前模式：基于选定关键词范围生成消费电子 KV 预热方案")
+st.markdown("## Work Space")
+st.caption("基于选定关键词范围生成KV方案")
 
 # 检查当前筛选状态
 active_pool = st.session_state.get("active_pool", {})
 if not active_pool:
-    st.warning("⚠️ 注意：你尚未在控制中心锁定关键词范围，目前正在从全局数据库中随机抽取。")
+    st.warning("你未选择关键词范围，将从全局随机组合关键词")
 else:
-    st.info(f"🎯 范围已锁定：正在从你筛选的词库中进行随机组合。")
+    st.info(f"点击按钮以在筛选范围中随机组合关键词")
 
 c1, c2 = st.columns([3, 1])
 with c1:
-    user_idea = st.text_input("Core Idea", placeholder="输入新品的核心卖点 (如：4K/120fps, 极轻量化)...", label_visibility="collapsed")
+    user_idea = st.text_input("Core Idea", placeholder="输入核心创意点", label_visibility="collapsed")
 with c2:
     qty = st.number_input("Batch", 1, 8, 4, label_visibility="collapsed")
 
 # ===========================
 # 4. 执行生成 (DeepSeek 商业视觉润色)
 # ===========================
-if st.button("🔥 开始生成商业 KV 方案", type="primary", use_container_width=True):
+if st.button("开始提示词生成", type="primary", use_container_width=True):
     
     st.session_state.graphic_solutions = [] 
     placeholders = []   
@@ -106,7 +106,7 @@ if st.button("🔥 开始生成商业 KV 方案", type="primary", use_container_
         
         with ph.container(border=True):
             st.markdown(f"**草案{i+1}：** `{sk}`")
-            st.caption("⏳ 创意总监正在进行影调润色...") 
+            st.caption("提示词生成中...") 
     
     # --- DeepSeek 创意总监指令 (DJI/GoPro 风格适配) ---
     sys_prompt = """你是一名曾服务于 DJI 和 GoPro 和 Apple等顶级消费电子公司的资深创意总监。
@@ -155,7 +155,7 @@ if "graphic_solutions" in st.session_state and st.session_state.graphic_solution
     
     c_send, c_clear = st.columns([3, 1])
     with c_send:
-        if st.button("🚀 发送至自动化流水线", type="primary", use_container_width=True):
+        if st.button("发送至自动化流水线", type="primary", use_container_width=True):
             if "global_queue" not in st.session_state:
                 st.session_state.global_queue = []
             st.session_state.global_queue.extend(st.session_state.graphic_solutions)
