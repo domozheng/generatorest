@@ -6,7 +6,7 @@ import os
 import sys
 
 # ===========================
-# 0. Basic Setup
+# 0. 环境路径设置
 # ===========================
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.abspath(os.path.join(current_dir, '..'))
@@ -17,7 +17,7 @@ from engine_manager import render_sidebar, init_data
 from style_manager import apply_pro_style
 
 # ===========================
-# 1. Page Config
+# 1. 页面配置与初始化
 # ===========================
 st.set_page_config(layout="wide", page_title="Automation Central")
 apply_pro_style()
@@ -25,21 +25,19 @@ render_sidebar()
 init_data()
 
 # ===========================
-# 2. Data Sync
+# 2. 队列数据同步
 # ===========================
 if "global_queue" not in st.session_state:
     st.session_state.global_queue = []
 
-# Patch: if queue is empty, try to fetch from Text Studio results
-if not st.session_state.global_queue and "text_solutions" in st.session_state and st.session_state.text_solutions:
-    st.session_state.global_queue = [item["prompt_text"] for item in st.session_state.text_solutions if "prompt_text" in item]
+# 已移除：原本从 Text Studio 自动同步结果的补丁代码
 
 current_queue_text = ""
 if st.session_state.global_queue:
     current_queue_text = "\n\n".join(st.session_state.global_queue)
 
 # ===========================
-# 3. Minimal UI
+# 3. 界面布局
 # ===========================
 st.markdown("## Automation Central")
 st.caption("Universal AI Platform Adaptor (Safe Wait Mode)")
@@ -50,24 +48,25 @@ with col_info:
 with col_clear:
     if st.button("Clear Queue", use_container_width=True):
         st.session_state.global_queue = []
-        if "text_solutions" in st.session_state: st.session_state.text_solutions = [] 
+        # 已移除：对 text_solutions 的清空引用
         st.rerun()
 
 user_input = st.text_area(
     "Queue Preview", 
     value=current_queue_text, 
     height=350, 
-    placeholder="Waiting for tasks from Studio...",
+    placeholder="Waiting for tasks from Graphic Lab...",
     label_visibility="collapsed"
 )
 
+# 同步手动编辑的内容到 Session State
 if user_input != current_queue_text:
     st.session_state.global_queue = [t.strip() for t in user_input.split('\n\n') if t.strip()]
 
 st.divider()
 
 # ===========================
-# 4. Core Logic (Updated with 30s Wait)
+# 4. 核心逻辑 (30秒安全等待脚本)
 # ===========================
 if st.button("⚡ Generate Safe-Wait Script (30s Delay)", type="primary", use_container_width=True):
     task_list = []
@@ -85,7 +84,7 @@ if st.button("⚡ Generate Safe-Wait Script (30s Delay)", type="primary", use_co
     if task_list:
         encoded_data = urllib.parse.quote(json.dumps(task_list))
         
-        # --- JS Code with Stricter Checks & 30s Timer ---
+        # --- JS 自动化脚本 ---
         js_code = f"""(async function() {{
             console.clear();
             console.log("%c 🚀 Safe Automation Started (30s Delay) ", "background: #000; color: #0f0; font-size: 14px");
@@ -130,20 +129,16 @@ if st.button("⚡ Generate Safe-Wait Script (30s Delay)", type="primary", use_co
             }}
 
             function isBusy() {{
-                // Check 1: Stop buttons
                 let stopBtn = document.querySelector('[aria-label="Stop generating"]') || 
                               document.querySelector('.stop-button') || 
                               document.querySelector('button[aria-label="停止"]') ||
                               document.querySelector('button[aria-label="Stop"]');
                 if (stopBtn) return true;
 
-                // Check 2: Send button state (disabled usually means generating)
                 let sendBtn = getSendBtn();
                 if (sendBtn && sendBtn.disabled) return true;
                 
-                // Check 3: Loading spinners
                 if (document.querySelector('.result-streaming')) return true;
-
                 return false;
             }}
 
@@ -185,13 +180,10 @@ if st.button("⚡ Generate Safe-Wait Script (30s Delay)", type="primary", use_co
                     }}
                 }}
                 
-                // --- Safe Wait Logic ---
                 if (i < tasks.length - 1) {{
-                    // 1. Initial buffer to let generation start
                     showStatus("⏳ Starting...", "#616161");
                     await new Promise(r => setTimeout(r, 5000));
                     
-                    // 2. Wait until system is NOT busy
                     let waitSec = 0;
                     while(true) {{
                         if (window.kill) break;
@@ -200,14 +192,13 @@ if st.button("⚡ Generate Safe-Wait Script (30s Delay)", type="primary", use_co
                             await new Promise(r => setTimeout(r, 1000));
                             waitSec++;
                         }} else {{
-                            // System seems idle, but let's double check after 2 seconds
                             await new Promise(r => setTimeout(r, 2000));
-                            if (!isBusy()) break; // Truly idle
+                            if (!isBusy()) break; 
                         }}
                     }}
 
-                    // 3. HARD 30s Cooldown (User Request)
-                    for (let s = 120; s > 0; s--) {{
+                    // 强制 30s 冷却
+                    for (let s = 30; s > 0; s--) {{
                          if (window.kill) break;
                          showStatus("☕ Cooldown: " + s + "s", "#f57c00");
                          await new Promise(r => setTimeout(r, 1000));
@@ -221,6 +212,6 @@ if st.button("⚡ Generate Safe-Wait Script (30s Delay)", type="primary", use_co
         
         with st.expander("📦 Get Safe-Wait Script", expanded=True):
             st.code(js_code, language="javascript")
-        st.caption("Tip: Copy the code, F12 on ChatGPT/Gemini/Doubao, paste into Console and Enter.")
+        st.caption("Tip: Copy the code, F12 on AI Platform, paste into Console and Enter.")
     else:
         st.error("No valid tasks found in the queue.")
