@@ -1,0 +1,14 @@
+Three-Point Lighting
+Rim Lighting / Outline Light
+Top-Down Softbox
+Backlit Silhouette
+Volumetric Lighting / God Rays
+Golden Hour Glow
+Moody Low-key Lighting
+Anamorphic Blue Flares
+Ray-Traced Reflections
+Caustics
+Subsurface Scattering / SSS
+Anisotropic Reflection
+Cyberpunk Neon Accents
+Laser Scan Lines
