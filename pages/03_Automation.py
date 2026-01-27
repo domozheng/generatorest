@@ -87,7 +87,7 @@ if st.button("⚡ Generate Safe-Wait Script (30s Delay)", type="primary", use_co
         # --- JS 自动化脚本 ---
         js_code = f"""(async function() {{
             console.clear();
-            console.log("%c 🚀 Safe Automation Started (30s Delay) ", "background: #000; color: #0f0; font-size: 14px");
+            console.log("%c Safe Automation Started (30s Delay) ", "background: #000; color: #0f0; font-size: 14px");
             window.kill = false;
             const tasks = JSON.parse(decodeURIComponent("{encoded_data}"));
             
@@ -149,13 +149,13 @@ if st.button("⚡ Generate Safe-Wait Script (30s Delay)", type="primary", use_co
                 
                 let box = getInputBox();
                 if (!box) {{ 
-                    showStatus("⚠️ Waiting for Input Box...", "#f57c00");
+                    showStatus("Waiting for Input Box...", "#f57c00");
                     await new Promise(r => setTimeout(r, 2000));
                     box = getInputBox();
                 }}
                 
                 if (box) {{
-                    showStatus("✍️ Writing Task " + (i+1) + "/" + tasks.length, "#1976d2");
+                    showStatus("Writing Task " + (i+1) + "/" + tasks.length, "#1976d2");
                     box.focus();
                     
                     let success = false;
@@ -181,7 +181,7 @@ if st.button("⚡ Generate Safe-Wait Script (30s Delay)", type="primary", use_co
                 }}
                 
                 if (i < tasks.length - 1) {{
-                    showStatus("⏳ Starting...", "#616161");
+                    showStatus("Starting...", "#616161");
                     await new Promise(r => setTimeout(r, 5000));
                     
                     let waitSec = 0;
@@ -205,7 +205,7 @@ if st.button("⚡ Generate Safe-Wait Script (30s Delay)", type="primary", use_co
                     }}
                 }}
             }}
-            if(!window.kill) showStatus("🎉 All Done!", "#2e7d32");
+            if(!window.kill) showStatus("All Done!", "#2e7d32");
         }})();"""
 
         st.success(f"✅ Ready! ({len(task_list)} Tasks Parsed)")
