@@ -68,7 +68,7 @@ st.divider()
 # ===========================
 # 4. 核心逻辑 (30秒安全等待脚本)
 # ===========================
-if st.button("⚡ Generate Safe-Wait Script (30s Delay)", type="primary", use_container_width=True):
+if st.button("Generate Safe-Wait Script (60s Delay)", type="primary", use_container_width=True):
     task_list = []
     if user_input:
         if "**方案" in user_input:
@@ -142,7 +142,7 @@ if st.button("⚡ Generate Safe-Wait Script (30s Delay)", type="primary", use_co
                 return false;
             }}
 
-            showStatus("🚀 Loaded " + tasks.length + " tasks", "#444"); 
+            showStatus("Loaded " + tasks.length + " tasks", "#444"); 
             
             for (let i = 0; i < tasks.length; i++) {{
                 if (window.kill) {{ showStatus("🛑 Stopped", "#d32f2f"); break; }}
@@ -188,7 +188,7 @@ if st.button("⚡ Generate Safe-Wait Script (30s Delay)", type="primary", use_co
                     while(true) {{
                         if (window.kill) break;
                         if (isBusy()) {{
-                            showStatus("🎨 Generating (" + waitSec + "s)...", "#7b1fa2");
+                            showStatus("Generating (" + waitSec + "s)...", "#7b1fa2");
                             await new Promise(r => setTimeout(r, 1000));
                             waitSec++;
                         }} else {{
@@ -197,8 +197,8 @@ if st.button("⚡ Generate Safe-Wait Script (30s Delay)", type="primary", use_co
                         }}
                     }}
 
-                    // 强制 30s 冷却
-                    for (let s = 30; s > 0; s--) {{
+                    // 强制 60s 冷却
+                    for (let s = 60; s > 0; s--) {{
                          if (window.kill) break;
                          showStatus("☕ Cooldown: " + s + "s", "#f57c00");
                          await new Promise(r => setTimeout(r, 1000));
@@ -210,7 +210,7 @@ if st.button("⚡ Generate Safe-Wait Script (30s Delay)", type="primary", use_co
 
         st.success(f"✅ Ready! ({len(task_list)} Tasks Parsed)")
         
-        with st.expander("📦 Get Safe-Wait Script", expanded=True):
+        with st.expander("Get Safe-Wait Script", expanded=True):
             st.code(js_code, language="javascript")
         st.caption("Tip: Copy the code, F12 on AI Platform, paste into Console and Enter.")
     else:
