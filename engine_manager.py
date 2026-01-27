@@ -95,7 +95,6 @@ def render_sidebar():
             **Reference:** {len(db.get('Reference', []))}  
             **Scene:** {len(db.get('Scene', []))}  
             **Color:** {len(db.get('Color', []))}  
-            **Texture:** {len(db.get('Texture', []))}  
             **Composition:** {len(db.get('Composition', []))}  
             **Elements:** {len(db.get('Elements', []))}
             **Usage:** {len(db.get('Usage', []))}
