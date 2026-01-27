@@ -87,19 +87,32 @@ if st.button("开始提示词生成", type="primary", use_container_width=True):
         placeholders.append(ph)
         
         # 核心逻辑：从智能抽取的词库中拼装
-        r_style = smart_pick("StyleSystem", 1)
         r_subject = smart_pick("Subject", 1)
-        r_tech = smart_pick("Technique", 1)
+        r_reference = smart_pick("Reference", 1)
+        r_scene = smart_pick("Scene", 1)
+        r_action = smart_pick("Action", 1)
+        r_lighting = smart_pick("Lighting", 1)
+        r_lensLanguage = smart_pick("Lens_language", 1)
+        r_elements = smart_pick("Elements", 1)
+        r_composition = smart_pick("Composition", 1)
         r_color = smart_pick("Color", 1)
         r_mood = smart_pick("Mood", 1)
+        r_usage = smart_pick("Usage", 1)
         
         # 语义拼装
         sk_parts = []
         if user_idea: sk_parts.append(user_idea.strip())
         if r_subject: sk_parts.append(r_subject[0])
-        if r_style: sk_parts.append(r_style[0])
-        if r_tech: sk_parts.append(r_tech[0])
+        if r_reference: sk_parts.append(r_reference[0])
+        if r_scene: sk_parts.append(r_scene[0])
+        if r_action: sk_parts.append(r_action[0])
+        if r_lighting: sk_parts.append(r_lighting[0])
+        if r_lensLanguage: sk_parts.append(r_lensLanguage[0])
+        if r_elements: sk_parts.append(r_elements[0])
+        if r_composition: sk_parts.append(r_composition[0])
+        if r_color: sk_parts.append(r_color[0])
         if r_mood: sk_parts.append(r_mood[0])
+        if r_usage: sk_parts.append(r_usage[0])
         
         sk = ", ".join(sk_parts)
         skeletons.append(sk)
@@ -123,7 +136,7 @@ if st.button("开始提示词生成", type="primary", use_container_width=True):
         idx = i + 1
         ph = placeholders[i]
         
-        user_prompt = f"【视觉骨架】：{sk} \n 请基于此骨架生成一段 100 字以内的专业 KV 描述词，以 '**方案{idx}：**' 开头。"
+        user_prompt = f"【视觉骨架】：{sk} \n 请基于此骨架生成一段 150 字以内的专业 KV 描述词，以 '**方案{idx}：**' 开头。"
         
         try:
             ph.empty()
