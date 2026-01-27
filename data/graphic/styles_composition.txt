@@ -1,7 +1,9 @@
-图形化
-图腾
-块面填色
-平涂
-无厚重阴影
-无填充
-无粗重轮廓线
+Centric Hero Shot
+Dynamic Diagonal
+Floating / Zero-Gravity
+Off-Center Tension
+Exploded View
+Symmetric Alignment
+Minimalist Negative Space
+对称
+双主体组合展示正反面
