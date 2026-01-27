@@ -14,9 +14,9 @@ WAREHOUSE = {
     # --- Style Matrix ---
     "Reference":   "data/graphic/styles_reference.txt",
     "Color":         "data/graphic/styles_color.txt",
-    "scene":       "data/graphic/styles_scene.txt",
+    "Scene":       "data/graphic/styles_scene.txt",
     "Composition":   "data/graphic/styles_composition.txt",
-    "Accent":        "data/graphic/styles_accent.txt",
+    "Elements":        "data/graphic/styles_elements.txt",
     
     # --- Atmosphere ---
     "Mood":          "data/common/moods.txt",
