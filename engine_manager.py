@@ -69,7 +69,7 @@ def save_data(file_key, new_list):
 # ==========================================
 def render_sidebar():
     with st.sidebar:
-        logo_path = "images/logo/logo.png"
+        logo_path = "images/logo/logo.svg"
         
         if os.path.exists(logo_path):
             st.logo(logo_path, icon_image=logo_path)
