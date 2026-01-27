@@ -34,6 +34,16 @@ def apply_pro_style():
             padding-right: 2rem !important;
             max-width: 100% !important;
         }}
+        [data-testid="stLogo"] {
+            height: 5rem !important; /* 默认通常是 2rem，这里改成了 5rem */
+            max-height: 10rem !important;
+        }
+        
+        /* 同时确保里面的图片也跟着变大 */
+        [data-testid="stLogo"] img {
+            height: 100% !important;
+            width: auto !important;
+        }
         
         /* 隐藏掉不需要的 Header 元素，但保留布局空间 */
         #MainMenu, footer {{ visibility: hidden !important; }} 
