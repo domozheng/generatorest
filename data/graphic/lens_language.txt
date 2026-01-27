@@ -10,3 +10,10 @@ Deep Focus
 Motion Blur Trails
 长曝光
 Frozen Frame
+长焦
+高位侧俯拍
+平视
+俯拍
+左侧仰拍
+右侧仰拍
+近距超广角
