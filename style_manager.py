@@ -8,34 +8,41 @@ def apply_pro_style():
         @import url('{font_url}');
 
         /* ============================
-           1. 布局修正 (👉 修复点：这里改动了)
+           1. 字体修复 (👉 关键修复点)
+           ============================ */
+        /* 之前是强制所有元素(div, span)都换字体，导致 Icon 图标变成了文字乱码。
+           现在改为只针对真正的“文本标签”应用字体。 */
+        html, body, p, label, button, input, textarea, h1, h2, h3, h4, h5, h6, .stMarkdown {{ 
+            font-family: 'Poppins', 'Noto Sans SC', sans-serif !important;
+            color: #d0d0d0; 
+        }}
+        
+        /* 保护 Streamlit 的图标字体不被覆盖 */
+        .material-icons, .material-symbols-rounded, [data-testid="stExpander"] svg {{
+            font-family: 'Material Icons', 'Material Symbols Rounded', sans-serif !important;
+        }}
+
+        .stApp {{ background-color: #000000; }}
+
+        /* ============================
+           2. 布局修正
            ============================ */
         .block-container {{
-            padding-top: 4rem !important;
+            padding-top: 3rem !important; /* 稍微留点呼吸感 */
             padding-bottom: 2rem !important;
             padding-left: 2rem !important;
             padding-right: 2rem !important;
             max-width: 100% !important;
         }}
         
-        /* 🔴 修改A：只隐藏菜单和页脚，不要隐藏 Header，否则按钮也会消失 */
+        /* 隐藏掉不需要的 Header 元素，但保留布局空间 */
         #MainMenu, footer {{ visibility: hidden !important; }} 
-
-        /* 🔴 修改B：把 Header 变成透明且允许鼠标穿透 (这样才能点到下面的按钮) */
         header {{ 
-            visibility: visible !important; /* 必须可见 */
             background-color: transparent !important;
-            pointer-events: none !important; /* 让鼠标穿透 Header 空白处 */
-        }}
-
-        .stApp {{ background-color: #000000; }}
-        html, body, p, div, span, button, input, textarea, label, h1, h2, h3, h4, h5, h6 {{ 
-            font-family: 'Poppins', 'Noto Sans SC', sans-serif !important;
-            color: #d0d0d0; 
         }}
 
         /* ============================
-           2. 下拉菜单纯黑化
+           3. 控件纯黑化 (输入框、下拉框)
            ============================ */
         div[data-baseweb="select"] > div {{
             background-color: #0a0a0a !important;
@@ -49,38 +56,22 @@ def apply_pro_style():
         li[role="option"] {{ color: #ccc !important; }}
         li[role="option"]:hover {{ background-color: #1a1a1a !important; }}
         li[aria-selected="true"] {{ background-color: #222 !important; color: #fff !important; }}
-        .stSelectbox label {{ display: none !important; }}
-
-        /* ============================
-           3. 输入框 & 数字框 (去红修正)
-           =========================== */
+        
+        /* 输入框去红 */
         .stTextArea textarea, .stTextInput input {{
             background-color: #0a0a0a !important;
             border: 1px solid #333 !important;
             color: #e0e0e0 !important;
             caret-color: #fff !important; 
         }}
-        
         .stTextArea textarea:focus, .stTextInput input:focus {{
             border-color: #777 !important; 
-            box-shadow: none !important;   
-            outline: none !important;
+            box-shadow: none !important;
         }}
-
         div[data-testid="stNumberInput"] div[data-baseweb="input"] {{
             background-color: #0a0a0a !important;
             border: 1px solid #333 !important;
             color: #e0e0e0 !important;
-        }}
-        div[data-testid="stNumberInput"] div[data-baseweb="input"]:focus-within {{
-            border-color: #777 !important; 
-            box-shadow: none !important;
-            caret-color: #fff !important;
-        }}
-
-        div[data-baseweb="select"] > div:focus-within {{
-            border-color: #777 !important;
-            box-shadow: none !important;
         }}
 
         /* ============================
@@ -99,50 +90,30 @@ def apply_pro_style():
             color: #fff !important;
         }}
         
-        div.stButton > button:contains("✕") {{
-            border-color: #331111 !important;
-            color: #663333 !important;
-            line-height: 1 !important;
-        }}
-        div.stButton > button:contains("✕"):hover {{
-            background-color: #330000 !important;
-            border-color: #ff4444 !important;
-            color: #ff4444 !important;
+        /* 针对“反选”等特殊按钮的微调 */
+        div.stButton > button:active {{
+            background-color: #333 !important;
+            color: #fff !important;
         }}
 
         /* ============================
-           5. 侧边栏修复 (👉 修复点：这里改动了)
+           5. 侧边栏 & Expander 修复
            =========================== */
-        [data-testid="stSidebar"] {{ background-color: #0a0a0a !important; border-right: 1px solid #1a1a1a !important; }}
-        
-        /* 隐藏幽灵文字 */
-        [data-testid="stHeader"] button[data-testid="stSidebarCollapsedControl"] *, [data-testid="stHeader"] button[data-testid="stSidebarExpandedControl"] * {{ display: none !important; }}
-        
-        /* 🔴 修改C：按钮本身必须 pointer-events: auto，否则会被 Header 的穿透属性影响导致点不到 */
-        [data-testid="stHeader"] button[data-testid="stSidebarCollapsedControl"], [data-testid="stHeader"] button[data-testid="stSidebarExpandedControl"] {{
-            border: 1px solid #333 !important; 
-            background-color: #111 !important; 
-            border-radius: 4px !important;
-            width: 36px !important; 
-            height: 36px !important; 
-            display: flex !important; 
-            align-items: center !important; 
-            justify-content: center !important;
-            
-            /* 关键：恢复点击 */
-            pointer-events: auto !important; 
-            cursor: pointer !important;
-            
-            position: fixed !important; 
-            left: 1rem !important; 
-            top: 0.8rem !important; /*稍微往下挪一点点，视觉更舒服*/
-            z-index: 999999 !important;
+        [data-testid="stSidebar"] {{ 
+            background-color: #0a0a0a !important; 
+            border-right: 1px solid #1a1a1a !important; 
         }}
         
-        /* 箭头绘制 (保持不变) */
-        [data-testid="stHeader"] button::after {{ content: "" !important; display: block !important; width: 8px !important; height: 8px !important; border-top: 2px solid #888 !important; border-right: 2px solid #888 !important; }}
-        [data-testid="stHeader"] button[data-testid="stSidebarCollapsedControl"]::after {{ transform: rotate(45deg); }}
-        [data-testid="stHeader"] button[data-testid="stSidebarExpandedControl"]::after {{ transform: rotate(-135deg); }}
+        /* 修复 Expander 的标题样式，防止它也继承错误的 CSS */
+        div[data-testid="stExpander"] details summary {{
+            color: #e0e0e0 !important;
+            font-size: 1.1em !important;
+        }}
+        
+        /* 修复左上角 Logo 区域的层级问题 */
+        [data-testid="stSidebarNav"] {{
+            padding-top: 1rem !important;
+        }}
 
     </style>
     """, unsafe_allow_html=True)
