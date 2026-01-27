@@ -92,7 +92,7 @@ if st.button("开始提示词生成", type="primary", use_container_width=True):
         r_scene = smart_pick("Scene", 1)
         r_action = smart_pick("Action", 1)
         r_lighting = smart_pick("Lighting", 1)
-        r_lensLanguage = smart_pick("Lens_language", 1)
+        r_lensLanguage = smart_pick("LensLanguage", 1)
         r_elements = smart_pick("Elements", 1)
         r_composition = smart_pick("Composition", 1)
         r_color = smart_pick("Color", 1)
