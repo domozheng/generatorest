@@ -1,119 +1,107 @@
 import streamlit as st
 
 def apply_pro_style():
-    font_url = "https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Poppins:wght@400;500;600&display=swap"
+    # 引入 Inter 字体 (最接近苹果 SF Pro 的字体)
+    font_url = "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500&display=swap"
     
     st.markdown(f"""
     <style>
         @import url('{font_url}');
 
         /* ============================
-           1. 字体修复 (👉 关键修复点)
+           1. 整体底色与字体
            ============================ */
-        /* 之前是强制所有元素(div, span)都换字体，导致 Icon 图标变成了文字乱码。
-           现在改为只针对真正的“文本标签”应用字体。 */
-        html, body, p, label, button, input, textarea, h1, h2, h3, h4, h5, h6, .stMarkdown {{ 
-            font-family: 'Poppins', 'Noto Sans SC', sans-serif !important;
-            color: #d0d0d0; 
+        html, body, [data-testid="stAppViewContainer"] {{
+            background-color: #F5F5F7 !important;
+            font-family: 'Inter', 'Noto Sans SC', -apple-system, sans-serif !important;
         }}
         
-        /* 保护 Streamlit 的图标字体不被覆盖 */
-        .material-icons, .material-symbols-rounded, [data-testid="stExpander"] svg {{
-            font-family: 'Material Icons', 'Material Symbols Rounded', sans-serif !important;
+        .stApp {{
+            background-color: #F5F5F7 !important;
         }}
 
-        .stApp {{ background-color: #000000; }}
-
-        /* ============================
-           2. 布局修正
-           ============================ */
-        .block-container {{
-            padding-top: 3rem !important; /* 稍微留点呼吸感 */
-            padding-bottom: 2rem !important;
-            padding-left: 2rem !important;
-            padding-right: 2rem !important;
-            max-width: 100% !important;
-        }}
-       
-        
-        /* 隐藏掉不需要的 Header 元素，但保留布局空间 */
-        #MainMenu, footer {{ visibility: hidden !important; }} 
-        header {{ 
-            background-color: transparent !important;
+        h1, h2, h3, h4, h5, h6, p, span, label {{
+            color: #1D1D1F !important; /* 苹果标志性的深灰黑 */
+            font-family: 'Inter', 'Noto Sans SC', sans-serif !important;
         }}
 
         /* ============================
-           3. 控件纯黑化 (输入框、下拉框)
+           2. 容器与卡片设计 (Apple Card Style)
            ============================ */
-        div[data-baseweb="select"] > div {{
-            background-color: #0a0a0a !important;
-            border-color: #333 !important;
-            color: #eee !important;
+        /* 给主要交互区域增加白色圆角卡片感 */
+        div[data-testid="stVerticalBlockBorderWrapper"], 
+        div.stExpander, 
+        .stTextArea textarea, 
+        .stTextInput input {{
+            background-color: #FFFFFF !important;
+            border: 1px solid #D2D2D7 !important;
+            border-radius: 12px !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
+            transition: all 0.3s ease;
         }}
-        ul[data-testid="stSelectboxVirtualDropdown"] {{
-            background-color: #0a0a0a !important;
-            border: 1px solid #333 !important;
-        }}
-        li[role="option"] {{ color: #ccc !important; }}
-        li[role="option"]:hover {{ background-color: #1a1a1a !important; }}
-        li[aria-selected="true"] {{ background-color: #222 !important; color: #fff !important; }}
         
-        /* 输入框去红 */
-        .stTextArea textarea, .stTextInput input {{
-            background-color: #0a0a0a !important;
-            border: 1px solid #333 !important;
-            color: #e0e0e0 !important;
-            caret-color: #fff !important; 
-        }}
-        .stTextArea textarea:focus, .stTextInput input:focus {{
-            border-color: #777 !important; 
-            box-shadow: none !important;
-        }}
-        div[data-testid="stNumberInput"] div[data-baseweb="input"] {{
-            background-color: #0a0a0a !important;
-            border: 1px solid #333 !important;
-            color: #e0e0e0 !important;
+        /* 悬停效果 */
+        div.stExpander:hover {{
+            border-color: #007AFF !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
         }}
 
         /* ============================
-           4. 工业风按钮
+           3. 侧边栏 (苹果灰风格)
+           ============================ */
+        [data-testid="stSidebar"] {{
+            background-color: #F5F5F7 !important;
+            border-right: 1px solid #D2D2D7 !important;
+        }}
+        
+        /* 侧边栏文字颜色 */
+        [data-testid="stSidebar"] * {{
+            color: #1D1D1F !important;
+        }}
+
+        /* ============================
+           4. 苹果蓝按钮 (Apple Blue)
            =========================== */
         div.stButton > button {{
-            background-color: #000000 !important;
-            color: #ccc !important;
-            border: 1px solid #333 !important;
-            border-radius: 4px !important;
-            transition: all 0.2s;
-        }}
-        div.stButton > button:hover {{
-            background-color: #1a1a1a !important;
-            border-color: #888 !important;
-            color: #fff !important;
+            background-color: #FFFFFF !important;
+            color: #007AFF !important;
+            border: 1px solid #007AFF !important;
+            border-radius: 20px !important; /* 更加圆润的按钮 */
+            padding: 0.5rem 1.5rem !important;
+            font-weight: 500 !important;
         }}
         
-        /* 针对“反选”等特殊按钮的微调 */
-        div.stButton > button:active {{
-            background-color: #333 !important;
-            color: #fff !important;
+        /* 主按钮 (Primary) 风格 */
+        div.stButton > button[kind="primary"] {{
+            background-color: #007AFF !important;
+            color: #FFFFFF !important;
+            border: none !important;
+        }}
+        
+        div.stButton > button:hover {{
+            background-color: #007AFF !important;
+            color: #FFFFFF !important;
+            opacity: 0.8;
         }}
 
         /* ============================
-           5. 侧边栏 & Expander 修复
+           5. 搜索框与输入框
            =========================== */
-        [data-testid="stSidebar"] {{ 
-            background-color: #0a0a0a !important; 
-            border-right: 1px solid #1a1a1a !important; 
+        .stTextArea textarea:focus, .stTextInput input:focus {{
+            border-color: #007AFF !important;
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1) !important;
+        }}
+
+        /* ============================
+           6. 修复重叠与布局
+           =========================== */
+        .block-container {{
+            padding-top: 2rem !important;
         }}
         
-        /* 修复 Expander 的标题样式，防止它也继承错误的 CSS */
-        div[data-testid="stExpander"] details summary {{
-            color: #e0e0e0 !important;
-            font-size: 1.1em !important;
-        }}
-        
-        /* 修复左上角 Logo 区域的层级问题 */
-        [data-testid="stSidebarNav"] {{
-            padding-top: 1rem !important;
+        /* 保持图标字体正常 */
+        .material-icons, svg {{
+            fill: #1D1D1F !important;
         }}
 
     </style>
