@@ -17,6 +17,7 @@ WAREHOUSE = {
     "Scene":       "data/graphic/styles_scene.txt",
     "Composition":   "data/graphic/styles_composition.txt",
     "Elements":        "data/graphic/styles_elements.txt",
+    "LookLike":        "data/graphic/styles_lookLike.txt",
     
     # --- Atmosphere ---
     "Mood":          "data/common/moods.txt",
