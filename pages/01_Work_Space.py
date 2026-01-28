@@ -98,6 +98,7 @@ if st.button("开始提示词生成", type="primary", use_container_width=True):
         r_color = smart_pick("Color", 1)
         r_mood = smart_pick("Mood", 1)
         r_usage = smart_pick("Usage", 1)
+        r_lookLike = smart_pick("LookLike", 1)
         
         # 语义拼装
         sk_parts = []
@@ -113,6 +114,7 @@ if st.button("开始提示词生成", type="primary", use_container_width=True):
         if r_color: sk_parts.append(r_color[0])
         if r_mood: sk_parts.append(r_mood[0])
         if r_usage: sk_parts.append(r_usage[0])
+        if r_lookLike: sk_parts.append(r_lookLike[0])
         
         sk = ", ".join(sk_parts)
         skeletons.append(sk)
