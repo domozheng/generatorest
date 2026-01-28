@@ -94,6 +94,7 @@ def render_sidebar():
             st.markdown("### Style Matrix")
             st.markdown(f"""
             **Reference:** {len(db.get('Reference', []))}  
+            **LookLike:** {len(db.get('LookLike', []))}  
             **Scene:** {len(db.get('Scene', []))}  
             **Color:** {len(db.get('Color', []))}  
             **Composition:** {len(db.get('Composition', []))}  
