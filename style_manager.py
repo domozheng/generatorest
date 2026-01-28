@@ -1,103 +1,120 @@
 import streamlit as st
 
 def apply_pro_style():
-    # 引入 Apple 风格的 Inter 字体
-    font_url = "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+SC:wght@300;400&display=swap"
+    font_url = "https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Poppins:wght@400;500;600&display=swap"
     
     st.markdown(f"""
     <style>
         @import url('{font_url}');
 
         /* ============================
-           1. 字体保护 (解决乱码的关键)
+           1. 字体修复 (👉 关键修复点)
            ============================ */
+        /* 之前是强制所有元素(div, span)都换字体，导致 Icon 图标变成了文字乱码。
+           现在改为只针对真正的“文本标签”应用字体。 */
         html, body, p, label, button, input, textarea, h1, h2, h3, h4, h5, h6, .stMarkdown {{ 
-            font-family: 'Inter', 'Noto Sans SC', sans-serif !important;
-            -webkit-font-smoothing: antialiased;
+            font-family: 'Poppins', 'Noto Sans SC', sans-serif !important;
+            color: #d0d0d0; 
         }}
         
-        /* 强制保护图标字体，防止出现 arr... 或 MOD... 乱码 */
-        .material-icons, .material-symbols-rounded, [data-testid="stExpander"] svg, [data-testid="stSidebarNav"] svg {{
+        /* 保护 Streamlit 的图标字体不被覆盖 */
+        .material-icons, .material-symbols-rounded, [data-testid="stExpander"] svg {{
             font-family: 'Material Icons', 'Material Symbols Rounded', sans-serif !important;
         }}
 
+        .stApp {{ background-color: #000000; }}
+
         /* ============================
-           2. 液态渐变背景 (Liquid Background)
+           2. 布局修正
            ============================ */
-        .stApp {{
-            background: radial-gradient(circle at 0% 0%, #e0c3fc 0%, #8ec5fc 100%);
-            background-attachment: fixed;
+        .block-container {{
+            padding-top: 3rem !important; /* 稍微留点呼吸感 */
+            padding-bottom: 2rem !important;
+            padding-left: 2rem !important;
+            padding-right: 2rem !important;
+            max-width: 100% !important;
+        }}
+       
+        
+        /* 隐藏掉不需要的 Header 元素，但保留布局空间 */
+        #MainMenu, footer {{ visibility: hidden !important; }} 
+        header {{ 
+            background-color: transparent !important;
         }}
 
         /* ============================
-           3. 玻璃拟态容器 (Glassmorphism)
+           3. 控件纯黑化 (输入框、下拉框)
            ============================ */
-        /* 针对所有卡片、输入框、折叠面板的玻璃化 */
-        div[data-testid="stVerticalBlockBorderWrapper"], 
-        div.stExpander, 
-        .stTextArea textarea, 
-        .stTextInput input {{
-            background: rgba(255, 255, 255, 0.4) !important;
-            backdrop-filter: blur(20px) saturate(180%) !important;
-            -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-            border: 1px solid rgba(255, 255, 255, 0.3) !important;
-            border-radius: 20px !important;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07) !important;
-            color: #1d1d1f !important;
+        div[data-baseweb="select"] > div {{
+            background-color: #0a0a0a !important;
+            border-color: #333 !important;
+            color: #eee !important;
         }}
-
-        /* 修正输入框聚焦态 */
+        ul[data-testid="stSelectboxVirtualDropdown"] {{
+            background-color: #0a0a0a !important;
+            border: 1px solid #333 !important;
+        }}
+        li[role="option"] {{ color: #ccc !important; }}
+        li[role="option"]:hover {{ background-color: #1a1a1a !important; }}
+        li[aria-selected="true"] {{ background-color: #222 !important; color: #fff !important; }}
+        
+        /* 输入框去红 */
+        .stTextArea textarea, .stTextInput input {{
+            background-color: #0a0a0a !important;
+            border: 1px solid #333 !important;
+            color: #e0e0e0 !important;
+            caret-color: #fff !important; 
+        }}
         .stTextArea textarea:focus, .stTextInput input:focus {{
-            border: 1px solid rgba(0, 122, 255, 0.5) !important;
-            background: rgba(255, 255, 255, 0.6) !important;
-            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1) !important;
+            border-color: #777 !important; 
+            box-shadow: none !important;
+        }}
+        div[data-testid="stNumberInput"] div[data-baseweb="input"] {{
+            background-color: #0a0a0a !important;
+            border: 1px solid #333 !important;
+            color: #e0e0e0 !important;
         }}
 
         /* ============================
-           4. 苹果胶囊按钮 (Liquid Button)
-           ============================ */
+           4. 工业风按钮
+           =========================== */
         div.stButton > button {{
-            background: rgba(255, 255, 255, 0.7) !important;
-            backdrop-filter: blur(10px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.4) !important;
-            border-radius: 50px !important; /* 完美的胶囊圆角 */
-            color: #007AFF !important; /* 苹果蓝 */
-            padding: 10px 24px !important;
-            font-weight: 500 !important;
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            background-color: #000000 !important;
+            color: #ccc !important;
+            border: 1px solid #333 !important;
+            border-radius: 4px !important;
+            transition: all 0.2s;
         }}
-
-        /* 主按钮：实色苹果蓝，白色文字 */
-        div.stButton > button[kind="primary"] {{
-            background: #007AFF !important;
-            color: #FFFFFF !important;
-            border: none !important;
-            box-shadow: 0 4px 15px rgba(0, 122, 255, 0.3) !important;
-        }}
-
         div.stButton > button:hover {{
-            transform: scale(1.02);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1) !important;
-        }}
-
-        /* ============================
-           5. 侧边栏与导航 (Frosted Sidebar)
-           ============================ */
-        [data-testid="stSidebar"] {{
-            background: rgba(245, 245, 247, 0.5) !important;
-            backdrop-filter: blur(30px) !important;
-            border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
-        }}
-
-        /* 去掉所有分割线，改用间距感 */
-        hr {{ border: none !important; border-top: 1px solid rgba(0,0,0,0.05) !important; }}
-
-        /* 修正文字颜色 */
-        [data-testid="stSidebar"] h3, [data-testid="stSidebar"] span {{
-            color: #1d1d1f !important;
+            background-color: #1a1a1a !important;
+            border-color: #888 !important;
+            color: #fff !important;
         }}
         
-        .block-container {{ padding-top: 4rem !important; }}
+        /* 针对“反选”等特殊按钮的微调 */
+        div.stButton > button:active {{
+            background-color: #333 !important;
+            color: #fff !important;
+        }}
+
+        /* ============================
+           5. 侧边栏 & Expander 修复
+           =========================== */
+        [data-testid="stSidebar"] {{ 
+            background-color: #0a0a0a !important; 
+            border-right: 1px solid #1a1a1a !important; 
+        }}
+        
+        /* 修复 Expander 的标题样式，防止它也继承错误的 CSS */
+        div[data-testid="stExpander"] details summary {{
+            color: #e0e0e0 !important;
+            font-size: 1.1em !important;
+        }}
+        
+        /* 修复左上角 Logo 区域的层级问题 */
+        [data-testid="stSidebarNav"] {{
+            padding-top: 1rem !important;
+        }}
 
     </style>
     """, unsafe_allow_html=True)
