@@ -32,20 +32,28 @@ if "DEEPSEEK_KEY" in st.secrets:
         pass
 
 # ==========================================
-# 2. 核心智能抽取引擎 (适配筛选系统)
+# 2. 核心智能抽取引擎 (已修改为严格模式)
 # ==========================================
 def smart_pick(category, count=1):
     """
-    智能挑选函数：
-    1. 优先从 st.session_state.active_pool (用户手动筛选的范围) 中抽取
-    2. 如果没设置筛选范围，则从全局 db_all 中抽取
+    智能挑选函数 (逻辑修正版)：
+    1. 如果用户设定了筛选范围 (active_pool 存在)：
+       - 严格从 active_pool 里取词。
+       - 如果 active_pool 里该分类为空（用户全不选），则返回空列表 []。
+       - ❌ 绝不回退到全局数据库。
+       
+    2. 如果用户完全没设定过范围 (active_pool 不存在)：
+       - 为了防止程序跑空，才回退到全局 db_all 随机抽取。
     """
-    # 优先检查筛选后的活动池
-    active_pool = st.session_state.get("active_pool", {})
-    items = active_pool.get(category, [])
-    
-    # 如果活动池为空，则回退到全局数据库
-    if not items:
+    # 获取活动池，如果没设置过，默认为 None
+    active_pool = st.session_state.get("active_pool", None)
+
+    if active_pool is not None:
+        # 【严格模式】用户已经锁定了范围
+        # 直接获取，如果是空的，items 就是空列表
+        items = active_pool.get(category, [])
+    else:
+        # 【全随机模式】用户没设置范围，使用全局库保底
         db = st.session_state.get("db_all", {})
         items = db.get(category, [])
         
@@ -61,11 +69,17 @@ st.markdown("## Work Space")
 st.caption("基于选定关键词范围生成KV方案")
 
 # 检查当前筛选状态
-active_pool = st.session_state.get("active_pool", {})
-if not active_pool:
-    st.warning("你未选择关键词范围，将从全局随机组合关键词")
+active_pool = st.session_state.get("active_pool", None)
+
+if active_pool is None:
+    st.warning("⚠️ 提示：你尚未锁定关键词范围，目前处于【全局全随机】模式。")
 else:
-    st.info(f"点击按钮以在筛选范围中随机组合关键词")
+    # 简单的统计，让用户知道哪些类目是“空”的（即不会被生成的）
+    empty_cats = [k for k, v in active_pool.items() if not v]
+    if empty_cats:
+        st.info(f"🎯 范围已锁定。注意：以下类目因未勾选任何词，将不会参与生成：{', '.join(empty_cats)}")
+    else:
+        st.success(f"🎯 范围已锁定，所有类目均有备选词。")
 
 c1, c2 = st.columns([3, 1])
 with c1:
@@ -87,6 +101,7 @@ if st.button("开始提示词生成", type="primary", use_container_width=True):
         placeholders.append(ph)
         
         # 核心逻辑：从智能抽取的词库中拼装
+        # 如果 smart_pick 返回空列表，对应的变量就是 None 或空
         r_subject = smart_pick("Subject", 1)
         r_reference = smart_pick("Reference", 1)
         r_scene = smart_pick("Scene", 1)
@@ -100,7 +115,7 @@ if st.button("开始提示词生成", type="primary", use_container_width=True):
         r_usage = smart_pick("Usage", 1)
         r_lookLike = smart_pick("LookLike", 1)
         
-        # 语义拼装
+        # 语义拼装 (Only append if the list is valid)
         sk_parts = []
         if user_idea: sk_parts.append(user_idea.strip())
         if r_subject: sk_parts.append(r_subject[0])
@@ -116,12 +131,17 @@ if st.button("开始提示词生成", type="primary", use_container_width=True):
         if r_usage: sk_parts.append(r_usage[0])
         if r_lookLike: sk_parts.append(r_lookLike[0])
         
-        sk = ", ".join(sk_parts)
-        skeletons.append(sk)
-        
-        with ph.container(border=True):
-            st.markdown(f"**草案{i+1}：** `{sk}`")
-            st.caption("提示词生成中...") 
+        # 只有当骨架不为空时才生成
+        if sk_parts:
+            sk = ", ".join(sk_parts)
+            skeletons.append(sk)
+            
+            with ph.container(border=True):
+                st.markdown(f"**草案{i+1}：** `{sk}`")
+                st.caption("提示词生成中...")
+        else:
+            with ph.container(border=True):
+                st.warning(f"**草案{i+1}：** 关键词为空，请至少勾选一个类目或输入 Core Idea。")
     
     # --- DeepSeek 创意总监指令 (DJI/GoPro 风格适配) ---
     sys_prompt = """你是一名曾服务于 DJI 和 GoPro 和 Apple等顶级消费电子公司的资深创意总监。
@@ -134,6 +154,7 @@ if st.button("开始提示词生成", type="primary", use_container_width=True):
 
     final_results = []
 
+    # 仅处理有效的骨架
     for i, sk in enumerate(skeletons):
         idx = i + 1
         ph = placeholders[i]
